@@ -79,3 +79,26 @@ input[type="file"] {
 .custom-file-upload input[type="file"] {
   display: none;
 }
+.anomaly-warning {
+  background-color: #ffe0e0;
+  border: 1px solid #e74c3c;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+.anomalous-flows-list {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #fffbe6;
+  border-left: 4px solid orange;
+  border-radius: 4px;
+}
+
+.anomalous-flows-list ul {
+  list-style: none;
+  padding-left: 1em;
+}
+
+.anomalous-flows-list li::before {
+  content: "🔍 ";
+}
