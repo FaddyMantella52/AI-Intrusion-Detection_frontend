@@ -1,24 +1,48 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import ResultCard from './ResultCard';
 
 function UploadForm() {
+  const [file, setFile] = useState(null);
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
+  const handleUpload = async () => {
+    if (!file) return;
+
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await axios.post('http://localhost:5000/upload', formData);
-    setResult(response.data);
+    setLoading(true);
+    setResult(null);
+
+    try {
+      const response = await axios.post('http://localhost:5000/upload', formData);
+      setResult(response.data);
+    } catch (err) {
+      alert("Upload or prediction failed.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  return (
-    <div>
-      <input type="file" onChange={handleFileChange} />
-      {result && <pre>{JSON.stringify(result, null, 2)}</pre>}
-    </div>
-  );
+ return (
+  <div className="upload-box">
+    <label className="custom-file-upload">
+      📂 Choose File
+      <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+    </label>
+
+    {file && <span style={{ display: 'block', marginTop: '10px' }}>{file.name}</span>}
+
+    <button onClick={handleUpload}>
+      🚀 Upload & Analyze
+    </button>
+
+    {loading && <p>⏳ Analyzing traffic...</p>}
+    {result && <ResultCard result={result} />}
+  </div>
+);
 }
 
 export default UploadForm;

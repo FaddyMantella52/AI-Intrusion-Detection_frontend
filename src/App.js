@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
+import './App.css';
 import UploadForm from './components/UploadForm';
 
 function App() {
   return (
     <div className="App">
-      <h1>AI Intrusion detection</h1>
+      <h1>AI-Powered Network Threat Detector</h1>
       <UploadForm />
     </div>
   );
