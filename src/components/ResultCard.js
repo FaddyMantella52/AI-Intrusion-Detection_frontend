@@ -1,6 +1,7 @@
 import React from 'react';
 import MaliciousChart from './MaliciousChart';
 import AnomalyChart from './AnomalyChart';
+import recommendations from './Recommendations';
 
 function ResultCard({ result }) {
   return (
@@ -20,10 +21,27 @@ function ResultCard({ result }) {
           </ul>
 
           <MaliciousChart data={result.malicious_breakdown} />
+
+          <h4>🔐 Security Recommendations:</h4>
+          <ul>
+            {Object.entries(result.malicious_breakdown).map(([attack, count]) => {
+              const rec = recommendations[attack];
+              return rec ? (
+                <li key={attack}>
+                  <strong>{attack}</strong>: {rec.description}<br />
+                  🔒 <em>{rec.advice}</em><br />
+                  🔗 <a href={rec.link} target="_blank" rel="noopener noreferrer">Learn more</a>
+                </li>
+              ) : (
+                <li key={attack}>
+                  <strong>{attack}</strong>: No recommendation available.
+                </li>
+              );
+            })}
+          </ul>
         </>
       )}
 
-      {/* 🔍 Anomaly + Traffic Breakdown Chart */}
       <AnomalyChart
         benign={result.benign}
         malicious={result.malicious_total}
@@ -35,19 +53,6 @@ function ResultCard({ result }) {
           <h4>🚨 Anomalies Detected</h4>
           <p><strong>{result.anomaly_count}</strong> flows appear anomalous and may indicate unknown threats.</p>
           <p>Please inspect your network or consult a security expert.</p>
-        </div>
-      )}
-
-      {result.anomalous_flows && result.anomalous_flows.length > 0 && (
-        <div className="anomalous-flows-list">
-          <h4>⚠️ Anomalous Flows Details</h4>
-          <ul>
-            {result.anomalous_flows.map((flow, index) => (
-              <li key={index}>
-                Flow #{flow.index}: flagged by <strong>{flow.flagged_by.join(" + ")}</strong>
-              </li>
-            ))}
-          </ul>
         </div>
       )}
     </div>
